@@ -11,8 +11,12 @@ import {
   type PaymentMethod,
 } from "@/lib/fees";
 import { PLATFORMS } from "@/data/platforms";
+import { UI_COPY, useLanguage } from "@/lib/i18n";
 
 export function HubComparator() {
+  const { locale } = useLanguage();
+  const t = UI_COPY[locale];
+
   const [price, setPrice] = useState<string>("29");
   const [sales, setSales] = useState<string>("50");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
@@ -45,16 +49,11 @@ export function HubComparator() {
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-950">
-            Live 10-Platform Payout Ranking (2026 Rates)
-          </h2>
-          <p className="mt-1 text-sm text-slate-600">
-            Enter your price and monthly volume to rank every major creator & SaaS platform by real
-            net take-home pay.
-          </p>
+          <h2 className="text-xl font-bold tracking-tight text-slate-950">{t.hubTitle}</h2>
+          <p className="mt-1 text-sm text-slate-600">{t.hubSub}</p>
         </div>
         <span className="text-xs font-mono text-slate-500">
-          Monthly Gross: {formatCurrency(numericPrice * numericSales)}
+          {t.monthlyGross}: {formatCurrency(numericPrice * numericSales)}
         </span>
       </div>
 
@@ -65,7 +64,7 @@ export function HubComparator() {
             htmlFor="hub-price"
             className="block text-xs font-semibold uppercase tracking-wide text-slate-600"
           >
-            Product Price (USD)
+            {t.productPrice}
           </label>
           <div className="relative mt-1.5">
             <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 font-semibold">
@@ -87,7 +86,7 @@ export function HubComparator() {
             htmlFor="hub-sales"
             className="block text-xs font-semibold uppercase tracking-wide text-slate-600"
           >
-            Monthly Sales
+            {t.monthlySales}
           </label>
           <input
             id="hub-sales"
@@ -101,15 +100,15 @@ export function HubComparator() {
 
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wide text-slate-600">
-            Buyer Payment
+            {t.buyerPayment}
           </label>
           <select
             value={paymentMethod}
             onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
             className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white py-2 px-3 text-sm font-medium text-slate-900"
           >
-            <option value="card">Credit / Debit Card</option>
-            <option value="paypal">PayPal</option>
+            <option value="card">{t.card}</option>
+            <option value="paypal">{t.paypal}</option>
           </select>
         </div>
 
@@ -121,7 +120,7 @@ export function HubComparator() {
               onChange={(e) => setIsInternational(e.target.checked)}
               className="h-4 w-4 rounded border-slate-300 text-emerald-600"
             />
-            International buyers (+1.5%)
+            {t.intlBuyers}
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -130,7 +129,7 @@ export function HubComparator() {
               onChange={(e) => setIsSubscription(e.target.checked)}
               className="h-4 w-4 rounded border-slate-300 text-emerald-600"
             />
-            Recurring subscription
+            {t.recurringSub}
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -139,7 +138,7 @@ export function HubComparator() {
               onChange={(e) => setMorOnly(e.target.checked)}
               className="h-4 w-4 rounded border-slate-300 text-emerald-600"
             />
-            Merchant of Record (tax handled) only
+            {t.morOnly}
           </label>
         </div>
       </div>
@@ -149,13 +148,13 @@ export function HubComparator() {
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
-              <th className="py-2.5 pr-3 font-semibold">Platform</th>
-              <th className="py-2.5 px-3 font-semibold">Tax / MoR</th>
-              <th className="py-2.5 px-3 text-right font-semibold">Fee / Sale</th>
-              <th className="py-2.5 px-3 text-right font-semibold">Eff. Rate</th>
-              <th className="py-2.5 px-3 text-right font-semibold">Monthly Net</th>
-              <th className="py-2.5 px-3 text-right font-semibold">Annual Net</th>
-              <th className="py-2.5 pl-3 text-right font-semibold">vs. #1</th>
+              <th className="py-2.5 pr-3 font-semibold">{t.colPlatform}</th>
+              <th className="py-2.5 px-3 font-semibold">{t.colTaxMor}</th>
+              <th className="py-2.5 px-3 text-right font-semibold">{t.colFeeSale}</th>
+              <th className="py-2.5 px-3 text-right font-semibold">{t.colEffRate}</th>
+              <th className="py-2.5 px-3 text-right font-semibold">{t.colMonthlyNet}</th>
+              <th className="py-2.5 px-3 text-right font-semibold">{t.colAnnualNet}</th>
+              <th className="py-2.5 pl-3 text-right font-semibold">{t.colVsBest}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -188,10 +187,10 @@ export function HubComparator() {
                   <td className="py-3 px-3">
                     {meta.isMoR ? (
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
-                        <ShieldCheck className="h-3 w-3" /> Full MoR
+                        <ShieldCheck className="h-3 w-3" /> {t.fullMor}
                       </span>
                     ) : (
-                      <span className="text-xs text-slate-500">Self-managed</span>
+                      <span className="text-xs text-slate-500">{t.selfManaged}</span>
                     )}
                   </td>
                   <td className="py-3 px-3 text-right font-mono text-rose-700 tabular-nums">
@@ -208,9 +207,12 @@ export function HubComparator() {
                   </td>
                   <td className="py-3 pl-3 text-right font-mono text-xs tabular-nums">
                     {gap < 1 ? (
-                      <span className="font-bold text-emerald-700">Best</span>
+                      <span className="font-bold text-emerald-700">{t.bestBadge}</span>
                     ) : (
-                      <span className="text-rose-600">−{formatCurrency(gap)}/yr</span>
+                      <span className="text-rose-600">
+                        −{formatCurrency(gap)}
+                        {t.yrSuffix}
+                      </span>
                     )}
                   </td>
                 </tr>
